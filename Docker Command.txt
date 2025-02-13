@@ -1,0 +1,17 @@
+Server:
+dotnet --list-sdks
+dotnet new console
+docker build -t quote-server .
+docker run --name Quoter -d -p 13000:13000 quote-server
+docker logs Quoter
+docker start -i Quoter
+docker stop Quoter
+
+docker run -d --name Quoter --network quote-network -p 13000:13000 quote-server
+
+
+
+Client:
+docker build -t quote-client .
+docker network create quote-network
+docker run -it --name quote-client --network quote-network quote-client  
