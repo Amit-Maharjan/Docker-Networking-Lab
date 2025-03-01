@@ -1,0 +1,35 @@
+version: '1.0'
+services:
+  quote-server-1:
+    build: .
+    container_name: quote-server-1
+    networks:
+      - quote-network
+  quote-server-2:
+    build: .
+    container_name: quote-server-2
+    networks:
+      - quote-network
+  quote-server-3:
+    build: .
+    container_name: quote-server-3
+    networks:
+      - quote-network
+
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - "13000:13000"
+    depends_on:
+      - quote-server-1
+      - quote-server-2
+      - quote-server-3
+    networks:
+      - quote-network
+
+networks:
+  quote-network:
+    driver: bridge

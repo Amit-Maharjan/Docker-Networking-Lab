@@ -15,3 +15,9 @@ Client:
 docker build -t quote-client .
 docker network create quote-network
 docker run -it --name quote-client --network quote-network quote-client  
+
+
+
+Docker-Compose:
+docker-compose build
+quote-server % docker-compose up -d

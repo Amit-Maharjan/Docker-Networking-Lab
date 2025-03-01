@@ -21,6 +21,7 @@ class QuoteServer
     };
 
     private static Random random = new Random();
+    private static Guid instanceId = Guid.NewGuid();
 
     static void Main(string[] args)
     {
@@ -33,7 +34,7 @@ class QuoteServer
 
             server.Start();
 
-            Console.WriteLine("Quote Server running on port " + port);
+            Console.WriteLine($"Quote Server with instance id: {instanceId.ToString()} running on port {port}");
             Console.WriteLine("Press Ctrl-C to stop server");
 
             while(true) {
@@ -43,9 +44,14 @@ class QuoteServer
 
                 NetworkStream stream = client.GetStream();
 
+                byte[] buffer = new byte[256];
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                string receivedMsg = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                int quoteNumber = int.Parse(receivedMsg);
+               
                 var quoteList = new List<KeyValuePair<string, string>>(quotes);
-                var randomQuote = quoteList[random.Next(quoteList.Count)];
-                string responseMsg = $"\"{randomQuote.Key}\" - {randomQuote.Value}\n";
+                var selectedQuote = quoteList[quoteNumber - 1];
+                string responseMsg = $"Quote Server with instance id: {instanceId.ToString()} ----- \"{selectedQuote.Key}\" - {selectedQuote.Value}\n";
                 byte[] msg = Encoding.ASCII.GetBytes(responseMsg);
                 stream.Write(msg,0,msg.Length);
                 Console.WriteLine($"Sent: {responseMsg}");

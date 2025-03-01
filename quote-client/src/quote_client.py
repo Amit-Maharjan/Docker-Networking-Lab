@@ -31,7 +31,8 @@ def main():
             if number == 0:
                 break
             if 1 <= number <= 10:
-                get_quote(number)
+                for _ in range(100):
+                    get_quote(number)
             else:
                 print("Please enter a number between 1 and 10")
         except ValueError:
