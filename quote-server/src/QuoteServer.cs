@@ -60,6 +60,10 @@ class QuoteServer
             }
         } catch (SocketException ex) {
             Console.WriteLine("SocketException: {0}", ex);
+        } catch (IOException ex) {
+            Console.WriteLine("IOException: {0}", ex);
+        } catch (Exception ex) {
+            Console.WriteLine("General Exception: {0}", ex);
         } finally {
             server?.Stop();
         }
